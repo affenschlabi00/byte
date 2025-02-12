@@ -6,13 +6,25 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
 } from "@/components/ui/navigation-menu"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 import {Button} from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {GithubIcon} from "lucide-react";
+import {GithubIcon, UserIcon, XIcon} from "lucide-react";
+import {auth, signIn, signOut} from "@/auth";
+import {Skeleton} from "@/components/ui/skeleton";
+import {CloseIcon} from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 
-function Navbar() {
+async function Navbar() {
 
-    const login = true;
+    const session = await auth()
 
     return (
         <header className="content-center w-auto min-h-12 px-3 py-1 bg-white-100 drop-shadow mt-5 mr-5 ml-5 rounded-[16px]">
@@ -57,23 +69,52 @@ function Navbar() {
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                    {login ? (
+                    {session && session?.user ? (
                         <>
                             {/* TODO: Link to user-page */}
-                            <Link className="text-xs" href="/">
-                                @username
+                            <Link className="text-xs truncate max-w-[75px] overflow-hidden whitespace-nowrap" href="/">
+                                @{session.user.name}
                             </Link>
-                            <Avatar>
-                                {/* TODO: Use users avatar */}
-                                <AvatarImage src="https://placehold.co/64x64" alt="avatar" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className="focus:outline-none">
+                                    <Avatar>
+                                        <AvatarImage src={session.user.image ? session.user.image : "https://placehold.co/32x32"} alt="avatar" />
+                                        <AvatarFallback><Skeleton className="h-12 w-12 rounded-full"/></AvatarFallback>
+                                    </Avatar>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuLabel>Mein Account</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem asChild>
+                                        {/* TODO: Link to user-page */}
+                                        <Link href="/">
+                                            <UserIcon />Profil
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onSelect={async () => {
+                                            "use server"
+
+                                            await signOut();
+                                        }}
+                                    >
+                                        <CloseIcon/> Abmelden
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </>
                     ) : (
-                        /* TODO: Add Sign-in functionality */
-                        <Button className="h-6 text-xs px-2">
-                            <GithubIcon /> Anmelden
-                        </Button>
+
+                        <form
+                            action={async () => {
+                                "use server"
+                                await signIn("github")
+                            }}
+                        >
+                            <Button className="h-6 text-xs px-2" type="submit">
+                                <GithubIcon /> Anmelden
+                            </Button>
+                        </form>
                     )}
                 </div>
             </nav>
