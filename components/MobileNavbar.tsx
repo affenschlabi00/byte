@@ -7,14 +7,24 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import {EarthIcon, GithubIcon, HomeIcon, MenuIcon, TextIcon} from "lucide-react";
+import {EarthIcon, GithubIcon, HomeIcon, MenuIcon, TextIcon, UserIcon} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {auth, signIn, signOut} from "@/auth";
+import {
+    DropdownMenu,
+    DropdownMenuContent, DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import {Skeleton} from "@/components/ui/skeleton";
+import {CloseIcon} from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 
 
-function MobileNavbar() {
+async function MobileNavbar() {
 
-    const login = false;
+    const session = await auth()
 
     return (
         <header className="content-center w-auto min-h-12 px-3 py-1 bg-white-100 drop-shadow mt-5 mr-5 ml-5 rounded-[16px]">
@@ -50,23 +60,51 @@ function MobileNavbar() {
                         </div>
                         <SheetFooter>
                             <div className="flex items-center justify-center">
-                                {login ? (
+                                {session && session?.user ? (
                                     <>
-                                        {/* TODO: Link to user-page */}
-                                        <Link className="text-xs mr-2" href="/">
-                                            @username
+                                        <Link className="text-xs mr-2 truncate max-w-[100px] overflow-hidden whitespace-nowrap" href="/">
+                                            @{session.user.name}
                                         </Link>
-                                        <Avatar>
-                                            {/* TODO: Use users avatar */}
-                                            <AvatarImage src="https://placehold.co/64x64" alt="avatar" />
-                                            <AvatarFallback>CN</AvatarFallback>
-                                        </Avatar>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger className="focus:outline-none">
+                                                <Avatar>
+                                                    <AvatarImage src={session.user.image ? session.user.image : "https://placehold.co/32x32"} alt="avatar" />
+                                                    <AvatarFallback><Skeleton className="h-12 w-12 rounded-full"/></AvatarFallback>
+                                                </Avatar>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuLabel>Mein Account</DropdownMenuLabel>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem asChild>
+                                                    {/* TODO: Link to user-page */}
+                                                    <Link href="/">
+                                                        <UserIcon />Profil
+                                                    </Link>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onSelect={async () => {
+                                                        "use server"
+
+                                                        await signOut();
+                                                    }}
+                                                >
+                                                    <CloseIcon/> Abmelden
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                     </>
                                 ) : (
                                     /* TODO: Add Sign-in functionality */
-                                    <Button className="text-xs px-2">
-                                        <GithubIcon /> Anmelden
-                                    </Button>
+                                    <form
+                                        action={async () => {
+                                            "use server"
+                                            await signIn("github")
+                                        }}
+                                    >
+                                        <Button className="text-xs px-2" type="submit">
+                                            <GithubIcon /> Anmelden
+                                        </Button>
+                                    </form>
                                 )}
                             </div>
                         </SheetFooter>
