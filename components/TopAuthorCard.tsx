@@ -7,7 +7,7 @@ import {CardContent} from "@/components/ui/card";
 function TopAuthorCard({ author }: { author: any }) {
     return (
         <Card>
-            <CardContent className="flex aspect-square items-center justify-center p-6">
+            <CardContent className="flex aspect-square items-center justify-center p-6 select-none">
                 <span className="text-3xl font-semibold">{author}</span>
             </CardContent>
         </Card>
