@@ -13,7 +13,6 @@ async function setCachedData(key: string, data: any, ttl = 60) {
     setTimeout(() => cache.delete(key), ttl * 1000);
 }
 
-
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const page = searchParams.get("page") || 1;

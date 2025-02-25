@@ -1,7 +1,8 @@
+
 import Navbar from "@/components/Navbar";
 import MobileNavbar from "@/components/MobileNavbar";
-import {ReactNode} from "react";
 import {Toaster} from "@/components/ui/toaster";
+import {ReactNode} from "react";
 
 function Layout({ children }: { children: ReactNode }) {
 
