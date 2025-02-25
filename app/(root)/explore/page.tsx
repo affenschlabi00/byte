@@ -1,8 +1,5 @@
 import {auth} from "@/auth";
-import {client} from "@/sanity/lib/client";
-import {POSTS_QUERY} from "@/sanity/lib/queries";
-import Link from "next/link";
-import Image from "next/image";
+
 import {
     Carousel,
     CarouselContent,
@@ -16,8 +13,8 @@ import {Separator} from "@/components/ui/separator";
 import Form from "next/form";
 import {SearchIcon, CloseIcon} from "@sanity/icons";
 import {Button} from "@/components/ui/button";
-import PostCard from "@/components/PostCard";
 import PostsGrid from "@/components/PostsGrid";
+import {HeartIcon} from "lucide-react";
 
 
 export default async function Home() {
@@ -75,6 +72,14 @@ export default async function Home() {
             </div>
 
             <PostsGrid />
+
+            <Separator />
+
+            <div className="w-full flex justify-center items-center p-8 md:p-16 text-black-100">
+                <div className="flex justify-between gap-1.5">
+                    Made with <HeartIcon/> by Kinu!
+                </div>
+            </div>
         </div>) : (
             <div>
                 Nope
