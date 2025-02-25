@@ -16,15 +16,17 @@ import {Separator} from "@/components/ui/separator";
 import Form from "next/form";
 import {SearchIcon, CloseIcon} from "@sanity/icons";
 import {Button} from "@/components/ui/button";
+import PostCard from "@/components/PostCard";
+import PostsGrid from "@/components/PostsGrid";
 
 
 export default async function Home() {
 
     const session = await auth();
 
-    const posts = await client.fetch(POSTS_QUERY);
-
     return (
+
+        session && session?.user ? (
         <div className="flex flex-col items-center contain-content">
             <div className="flex container flex-col w-full items-center my-16 py-16 bg-white-100 drop-shadow rounded-xl">
                 <h1 className="text-7xl font-black">Explore!</h1>
@@ -72,38 +74,11 @@ export default async function Home() {
                 </Form>
             </div>
 
-            {session && session?.user ? (
-                <div>
-                    {posts?.map((post, postIndex) => (
-                        <div key={postIndex}>
-                            <h2>{post.title}</h2>
-                            <p>{post.description}</p>
-                            <p>{post.views}</p>
-                            <div>
-                                {post.files?.map((file, fileIndex) => (
-                                    <div key={fileIndex}>
-                                        <p>{file.asset.originalFilename}</p>
-                                        {file.asset.mimeType?.startsWith('image/') ? (
-                                            <Image src={file.asset.url} alt={file.asset.originalFilename} style={{ maxWidth: '200px' }} width={400} height={600} />
-                                        ) : (
-                                            <div>
-                                                <Link href={`${file.asset.url}`}>
-                                                    {file.asset.originalFilename}
-                                                </Link>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-
-                </div>
-            ) : (
-                <div>
-                    Nope
-                </div>
-            )}
-        </div>
+            <PostsGrid />
+        </div>) : (
+            <div>
+                Nope
+            </div>
+        )
     );
 }
