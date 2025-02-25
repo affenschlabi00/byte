@@ -17,7 +17,7 @@ import {
 
 import {Button} from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {GithubIcon, UserIcon, XIcon} from "lucide-react";
+import {GithubIcon, UserIcon} from "lucide-react";
 import {auth, signIn, signOut} from "@/auth";
 import {Skeleton} from "@/components/ui/skeleton";
 import {CloseIcon} from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
