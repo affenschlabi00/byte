@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import PostCard from "./PostCard"; // Your PostCard component
+import PostCard from "./PostCard";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext, PaginationLink } from "@/components/ui/pagination";
 
 const PostsGrid = () => {
@@ -31,7 +31,7 @@ const PostsGrid = () => {
             </div>
 
             {totalPages > 1 && (
-                <Pagination className="mt-6">
+                <Pagination className="mt-6 mb-12">
                     <PaginationContent>
                         <PaginationItem>
                             <PaginationPrevious
