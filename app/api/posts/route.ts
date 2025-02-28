@@ -15,8 +15,8 @@ async function setCachedData(key: string, data: any, ttl = 60) {
 
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
-    const page = searchParams.get("page") || 1;
-    const limit = searchParams.get("limit") || 9;
+    const page = searchParams.get("page") || "1";
+    const limit = searchParams.get("limit") || "9";
 
     const pageNumber = parseInt(page, 10);
     const limitNumber = parseInt(limit, 10);
