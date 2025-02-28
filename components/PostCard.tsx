@@ -4,7 +4,28 @@ import {Card} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {EyeIcon} from "lucide-react";
 
-function PostCard({ post }) {
+interface Asset {
+    url: string;
+    originalFilename: string;
+    mimeType: string;
+}
+
+interface FileAsset {
+    _id: string;
+    url: string;
+    originalFilename: string;
+    mimeType: string;
+}
+
+interface Post {
+    title: string;
+    description: string;
+    views: number;
+    preview?: { asset: Asset };
+    files?: { asset: FileAsset }[];
+}
+
+function PostCard({ post }: { post: Post }) {
     return (
         <Card className="max-w-sm min-w-sm w-full p-5">
             <div className="flex justify-between items-center">
@@ -16,7 +37,7 @@ function PostCard({ post }) {
             </div>
             <p className="overflow-scroll h-16 text-black-200 py-2">{post.description.length > 85 ? (post.description.slice(0, 85) + "...") : (post.description)}</p>
 
-            <Image src={post.preview?.asset.url} alt={post.preview?.asset.originalFilename}
+            <Image src={post.preview?.asset.url || ""} alt={post.preview?.asset.originalFilename || "Preview Image"}
                    className="rounded-2xl scale-100 w-full object-cover aspect-square drop-shadow"
                    width={600} height={400}/>
 
