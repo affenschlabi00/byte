@@ -4,11 +4,32 @@ import {NextResponse} from "next/server";
 
 const cache = new Map(); // use REDIS in future!!!
 
+interface Asset {
+    url: string;
+    originalFilename: string;
+    mimeType: string;
+}
+
+interface FileAsset {
+    _id: string;
+    url: string;
+    originalFilename: string;
+    mimeType: string;
+}
+
+interface Post {
+    title: string;
+    description: string;
+    views: number;
+    preview?: { asset: Asset };
+    files?: { asset: FileAsset }[];
+}
+
 async function getCachedData(key: string) {
     return cache.get(key) || null;
 }
 
-async function setCachedData(key: string, data: any, ttl = 60) {
+async function setCachedData(key: string, data: { posts: Post[], totalPages: number, currentPage: number }, ttl = 60) {
     cache.set(key, data);
     setTimeout(() => cache.delete(key), ttl * 1000);
 }
@@ -39,6 +60,7 @@ export async function GET(req: Request) {
             data: cachedData
         })
     } catch (error) {
+        console.error("Error fetching posts:", error);
         return NextResponse.json({ error: "Could not fetch posts"}, { status: 400})
     }
 }

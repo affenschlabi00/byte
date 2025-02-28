@@ -4,9 +4,30 @@ import { useEffect, useState } from "react";
 import PostCard from "./PostCard";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext, PaginationLink } from "@/components/ui/pagination";
 
+interface Asset {
+    url: string;
+    originalFilename: string;
+    mimeType: string;
+}
+
+interface FileAsset {
+    _id: string;
+    url: string;
+    originalFilename: string;
+    mimeType: string;
+}
+
+interface Post {
+    title: string;
+    description: string;
+    views: number;
+    preview?: { asset: Asset };
+    files?: { asset: FileAsset }[];
+}
+
 const PostsGrid = () => {
     const POSTS_PER_PAGE = 3;
-    const [posts, setPosts] = useState<any[]>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
@@ -36,7 +57,7 @@ const PostsGrid = () => {
                         <PaginationItem>
                             <PaginationPrevious
                                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                                disabled={currentPage === 1}
+                                isActive={currentPage === 1}
                                 className="cursor-pointer"
                             />
                         </PaginationItem>
@@ -56,7 +77,7 @@ const PostsGrid = () => {
                         <PaginationItem>
                             <PaginationNext
                                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                                disabled={currentPage === totalPages}
+                                isActive={currentPage === totalPages}
                                 className="cursor-pointer"
                             />
                         </PaginationItem>
