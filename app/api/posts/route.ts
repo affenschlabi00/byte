@@ -1,6 +1,7 @@
 import { POSTS_QUERY, TOTAL_POSTS_COUNT_QUERY } from "@/sanity/lib/queries";
 import { client } from "@/sanity/lib/client";
 import {NextResponse} from "next/server";
+import { rateLimit } from "../limiter";
 
 const cache = new Map(); // use REDIS in future!!!
 
@@ -35,6 +36,12 @@ async function setCachedData(key: string, data: { posts: Post[], totalPages: num
 }
 
 export async function GET(req: Request) {
+
+    const rateLimitResult = await rateLimit();
+    if (rateLimitResult.limited) {
+        return NextResponse.json({ error: rateLimitResult.message }, { status: 429 });
+    }
+
     const { searchParams } = new URL(req.url);
     const page = searchParams.get("page") || "1";
     const limit = searchParams.get("limit") || "9";

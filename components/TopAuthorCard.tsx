@@ -1,17 +1,36 @@
 "use client"
 
-import React from 'react';
-import {Card} from "@/components/ui/card";
-import {CardContent} from "@/components/ui/card";
+import React, { memo } from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
-function TopAuthorCard({ author }: { author: number }) {
+export interface Author {
+    _id: string;
+    name: string;
+    image: string;
+    postCount: number;
+    bio?: string;
+}
+
+interface TopAuthorCardProps {
+    author: Author;
+    className?: string;
+}
+
+export default memo(function TopAuthorCard({ author, className }: TopAuthorCardProps) {
+    const { name, image, postCount } = author;
+
     return (
-        <Card>
-            <CardContent className="flex aspect-square items-center justify-center p-6 select-none">
-                <span className="text-3xl font-semibold">{author}</span>
+        <Card className={cn("w-full", className)}>
+            <CardContent className="pt-6 flex flex-col items-center">
+                <Avatar className="h-20 w-20">
+                    <AvatarImage src={image} alt={name} />
+                    <AvatarFallback>{name[0]}</AvatarFallback>
+                </Avatar>
+                <h3 className="mt-4 font-semibold">{name}</h3>
+                <p className="text-sm text-muted-foreground">{postCount} Posts</p>
             </CardContent>
         </Card>
     );
-}
-
-export default TopAuthorCard;
+});

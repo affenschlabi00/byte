@@ -14,6 +14,19 @@ export const post = defineType({
             type: "string",
         }),
         defineField({
+            name: "author",
+            type: "reference",
+            to: [{ type: "user" }],
+        }),
+        defineField({
+            name: "preview",
+            title: "Vorschaubild",
+            type: "image",
+            options: {
+                hotspot: true
+            }
+        }),
+        defineField({
             name: "files",
             type: "array",
             of: [{ type: "file" }],
