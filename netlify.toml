@@ -13,4 +13,4 @@
   publish = ".next"
 
 [build.environment]
-  NEXT_PUBLIC_SITE_URL = "https://fanciful-cheesecake-b6d699.netlify.app/" 
+  NEXT_PUBLIC_SITE_URL = "https://fanciful-cheesecake-b6d699.netlify.app" 

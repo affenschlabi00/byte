@@ -37,7 +37,7 @@ export const {
             }
         },
     },
-    // Netlify-spezifische Konfiguration
+
     trustHost: true,
     cookies: {
         sessionToken: {
