@@ -17,7 +17,10 @@ export const {
     callbacks: {
         async signIn({ user }) {
             try {
-                if (!user.email) return false
+                if (!user.email) {
+                    console.error("No email provided by GitHub")
+                    return false
+                }
                 await syncUser(user)
                 return true
             } catch (error) {
