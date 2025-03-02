@@ -37,4 +37,17 @@ export const {
             }
         },
     },
+    // Netlify-spezifische Konfiguration
+    trustHost: true,
+    cookies: {
+        sessionToken: {
+            name: `__Secure-next-auth.session-token`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+                secure: true
+            }
+        }
+    }
 })
