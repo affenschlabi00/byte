@@ -37,7 +37,6 @@ export const {
             }
         },
     },
-
     trustHost: true,
     cookies: {
         sessionToken: {
