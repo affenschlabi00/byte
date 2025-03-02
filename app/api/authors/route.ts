@@ -1,6 +1,7 @@
 import { client } from "@/sanity/lib/client";
 import { NextResponse } from "next/server";
 import { rateLimit } from "../limiter";
+import { auth } from "@/auth";
 
 const cache = new Map(); // use REDIS in future!!!
 
@@ -32,6 +33,14 @@ async function setCachedData(key: string, data: Author[], ttl = 60) {
 }
 
 export async function GET() {
+    const session = await auth();
+    if (!session?.user) {
+        return NextResponse.json(
+            { error: "Unauthorized" },
+            { status: 401 }
+        );
+    }
+
     const rateLimitResult = await rateLimit();
     if (rateLimitResult.limited) {
         return NextResponse.json(
