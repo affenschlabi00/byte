@@ -8,12 +8,6 @@ import { toast } from "@/hooks/use-toast";
 const MAX_MESSAGE_LENGTH = 1000;
 const SIMULATED_API_DELAY = 1000;
 
-interface ToastMessage {
-    title: string;
-    description: string;
-    variant?: "default" | "destructive";
-}
-
 const TOAST_MESSAGES = {
     empty: {
         title: "Fehler",
