@@ -1,7 +1,6 @@
 import NextAuth from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 import { syncUser } from "@/lib/user"
-import { JWT } from "next-auth/jwt"
 
 export const {
     handlers: { GET, POST },
@@ -16,7 +15,9 @@ export const {
         }),
     ],
     session: {
-        strategy: "jwt"
+        strategy: "jwt",
+        maxAge: 60 * 60 * 24, // 24 Stunden gültig
+        updateAge: 30,   // Token wird alle 15 Minuten erneuert
     },
     callbacks: {
         async signIn({ user }) {
@@ -32,19 +33,28 @@ export const {
                 return false
             }
         },
-        async jwt({ token, user }) {
-            if (user) {
-                token.id = String(user.id ?? "")
-            }
-            return token
-        },
         async session({ session, token }) {
-            if (session.user) {
-                session.user.id = String(token.id ?? "")
+            try {
+                if (session.user) {
+                    session.user.id = token.sub ?? ""
+                }
+                return session
+            } catch (error) {
+                console.error("Session error:", error)
+                return session
             }
-            return session
         },
     },
     trustHost: true,
-    secret: process.env.NEXTAUTH_SECRET,
+    cookies: {
+        sessionToken: {
+            name: `__Secure-next-auth.session-token`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+                secure: true
+            }
+        }
+    }
 })
