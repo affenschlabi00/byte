@@ -18,16 +18,15 @@ import { Plus, Settings2, Mail } from 'lucide-react'
 import { ProfileComponent, ProfileTheme } from '@/types/profile'
 import { useRouter } from 'next/navigation'
 
-// Debounce-Funktion
-function debounce<T extends (...args: any[]) => any>(
-    func: T,
+function debounceTheme(
+    func: (theme: ProfileTheme) => void,
     wait: number
-): (...args: Parameters<T>) => void {
+): (theme: ProfileTheme) => void {
     let timeout: NodeJS.Timeout;
-    return function executedFunction(...args: Parameters<T>) {
+    return function executedFunction(theme: ProfileTheme) {
         const later = () => {
             clearTimeout(timeout);
-            func(...args);
+            func(theme);
         };
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
@@ -123,7 +122,7 @@ export function ProfileBuilder({ profile }: ProfileBuilderProps) {
     const [openPopoverId, setOpenPopoverId] = useState<string | null>(null)
 
     const debouncedThemeUpdate = useCallback(
-        debounce((newTheme: ProfileTheme) => {
+        debounceTheme((newTheme: ProfileTheme) => {
             setTheme(newTheme);
         }, 100),
         []
@@ -318,7 +317,7 @@ export function ProfileBuilder({ profile }: ProfileBuilderProps) {
             overflowWrap: 'break-word' as const,
             wordBreak: 'break-word' as const,
             whiteSpace: 'pre-wrap' as const,
-            textAlign: component.settings.alignment as any || 'center'
+            textAlign: component.settings.alignment || 'center'
         }
 
         const isSelected = selectedComponent === component.id
@@ -503,11 +502,11 @@ export function ProfileBuilder({ profile }: ProfileBuilderProps) {
             }
         }, [component.settings])
 
-        const handleBlur = (key: keyof ProfileComponent['settings'], value: any) => {
+        const handleBlur = (key: keyof ProfileComponent['settings'], value: ProfileComponent['settings'][keyof ProfileComponent['settings']]) => {
             updateComponentSettings(component.id, { [key]: value })
         }
 
-        const handleChange = (key: keyof ProfileComponent['settings'], value: any) => {
+        const handleChange = (key: keyof ProfileComponent['settings'], value: ProfileComponent['settings'][keyof ProfileComponent['settings']]) => {
             setLocalSettings(prev => ({ ...prev, [key]: value }))
         }
 

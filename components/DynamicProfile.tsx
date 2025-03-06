@@ -1,7 +1,6 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { PostsGrid } from "@/components/PostsGrid"
 import { ProfileComponent } from "@/types/profile"
 
 interface DynamicProfileProps {
@@ -58,7 +57,7 @@ function ProfileComponentRenderer({ component, profile }: {
         overflowWrap: 'break-word' as const,
         wordBreak: 'break-word' as const,
         whiteSpace: 'pre-wrap' as const,
-        textAlign: component.settings.alignment as any || 'center'
+        textAlign: component.settings.alignment || 'center'
     }
 
     switch (component.type) {
