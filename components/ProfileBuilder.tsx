@@ -66,15 +66,15 @@ export function ProfileBuilder({ profile }: ProfileBuilderProps) {
     }
 
     const componentTypes = [
-        { type: 'text', label: 'Text', icon: 'Type' },
-        { type: 'image', label: 'Bild', icon: 'Image' },
-        { type: 'heading', label: 'Überschrift', icon: 'Heading' },
-        { type: 'button', label: 'Button', icon: 'Square' },
-        { type: 'divider', label: 'Trennlinie', icon: 'Minus' },
-        { type: 'spacer', label: 'Abstand', icon: 'ArrowUpDown' },
-        { type: 'social', label: 'Social Media', icon: 'Share2' },
-        { type: 'avatar', label: 'Profilbild', icon: 'User' },
-        { type: 'contact', label: 'Kontakt', icon: 'Mail' }
+        { type: 'text', label: 'Text' },
+        { type: 'image', label: 'Bild' },
+        { type: 'heading', label: 'Überschrift' },
+        { type: 'button', label: 'Button' },
+        { type: 'divider', label: 'Trennlinie' },
+        { type: 'spacer', label: 'Abstand' },
+        { type: 'social', label: 'Social Media' },
+        { type: 'avatar', label: 'Profilbild' },
+        { type: 'contact', label: 'Kontakt' }
     ]
 
     const [components, setComponents] = useState<ProfileComponent[]>(
@@ -776,7 +776,7 @@ export function ProfileBuilder({ profile }: ProfileBuilderProps) {
                         </Button>
                     </div>
                     <div className="space-y-2">
-                        {componentTypes.map(({ type, label, icon }) => (
+                        {componentTypes.map(({ type, label }) => (
                             <Button
                                 key={type}
                                 variant="outline"
