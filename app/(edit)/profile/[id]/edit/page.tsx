@@ -6,9 +6,9 @@ import { groq } from "next-sanity";
 import { Profile } from "@/types/profile";
 
 interface EditProfilePageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 async function getProfileData(userId: string): Promise<Profile | null> {
