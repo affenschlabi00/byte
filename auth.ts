@@ -17,6 +17,11 @@ export const {
             clientSecret: process.env.GITHUB_SECRET!,
         }),
     ],
+    session: {
+        strategy: "jwt",
+        maxAge: 60 * 60 * 24, // 24 Stunden gültig
+        updateAge: 30,   // Token wird alle 15 Minuten erneuert
+    },
     callbacks: {
         async signIn({ user }) {
             try {
