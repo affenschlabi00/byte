@@ -75,7 +75,7 @@ const UserMenu = memo(function UserMenu({ user }: UserMenuProps) {
         <>
             <Link 
                 className="text-xs mr-2 truncate max-w-[100px] overflow-hidden whitespace-nowrap" 
-                href="/"
+                href="/profile"
                 title={displayName}
             >
                 @{displayName}
@@ -96,7 +96,7 @@ const UserMenu = memo(function UserMenu({ user }: UserMenuProps) {
                     <DropdownMenuLabel>Mein Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                        <Link href="/" className="flex items-center">
+                        <Link href="/profile" className="flex items-center">
                             <UserIcon className="mr-2" aria-hidden="true" />
                             <span>Profil</span>
                         </Link>

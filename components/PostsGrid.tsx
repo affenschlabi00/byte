@@ -15,6 +15,10 @@ import { toast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
 
+interface PostsGridProps {
+    authorId?: string;
+}
+
 interface PostsResponse {
     data: {
         posts: Post[];
@@ -25,7 +29,7 @@ interface PostsResponse {
 
 const POSTS_PER_PAGE = 3;
 
-export function PostsGrid() {
+export function PostsGrid({ authorId }: PostsGridProps) {
     const [posts, setPosts] = useState<Post[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -34,7 +38,14 @@ export function PostsGrid() {
     const fetchPosts = useCallback(async (page: number) => {
         setIsLoading(true);
         try {
-            const response = await fetch(`/api/posts?page=${page}&limit=${POSTS_PER_PAGE}`);
+            const url = new URL('/api/posts', window.location.origin);
+            url.searchParams.append('page', page.toString());
+            url.searchParams.append('limit', POSTS_PER_PAGE.toString());
+            if (authorId) {
+                url.searchParams.append('authorId', authorId);
+            }
+
+            const response = await fetch(url.toString());
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -54,7 +65,7 @@ export function PostsGrid() {
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [authorId]);
 
     const handlePageChange = useCallback((page: number) => {
         if (page === currentPage) return;

@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable}`}
+        className={`${inter.variable} h-full`}
       >
         {children}
       </body>

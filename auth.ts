@@ -1,6 +1,9 @@
 import NextAuth from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 import { syncUser } from "@/lib/user"
+import { client } from "@/sanity/lib/client"
+
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 export const {
     handlers: { GET, POST },
@@ -31,7 +34,15 @@ export const {
         async session({ session, token }) {
             try {
                 if (session.user) {
-                    session.user.id = token.sub ?? ""
+                    // Hole die Sanity User ID basierend auf der GitHub ID
+                    const sanityUser = await client.fetch(
+                        `*[_type == "user" && githubId == $githubId][0]{ _id }`,
+                        { githubId: token.sub }
+                    );
+                    
+                    if (sanityUser) {
+                        session.user.id = sanityUser._id;
+                    }
                 }
                 return session
             } catch (error) {
@@ -41,15 +52,17 @@ export const {
         },
     },
     trustHost: true,
-    cookies: {
-        sessionToken: {
-            name: `__Secure-next-auth.session-token`,
-            options: {
-                httpOnly: true,
-                sameSite: 'lax',
-                path: '/',
-                secure: true
+    cookies: isDevelopment
+        ? undefined // Im Development-Modus Standard-Cookie-Einstellungen verwenden
+        : {
+            sessionToken: {
+                name: `__Secure-next-auth.session-token`,
+                options: {
+                    httpOnly: true,
+                    sameSite: 'lax',
+                    path: '/',
+                    secure: true
+                }
             }
         }
-    }
 })
