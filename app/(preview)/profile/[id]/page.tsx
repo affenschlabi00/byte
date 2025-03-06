@@ -7,9 +7,9 @@ import { Profile } from "@/types/profile";
 import { EditProfileButton } from "@/components/EditProfileButton";
 
 interface ProfilePageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 async function getProfileData(userId: string): Promise<Profile | null> {
