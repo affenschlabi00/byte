@@ -1,19 +1,18 @@
 
-import Navbar from "@/components/Navbar";
-import MobileNavbar from "@/components/MobileNavbar";
 import {Toaster} from "@/components/ui/toaster";
 import {ReactNode} from "react";
-
+import { AuthenticatedMobileNav } from "@/components/navigation/AuthenticatedMobileNav";
+import { AuthenticatedNav } from "@/components/navigation/AuthenticatedNav";
 function Layout({ children }: { children: ReactNode }) {
 
     return (
         <main className="font-inter">
             <div className="hidden xs:block">
-                <Navbar />
+                <AuthenticatedNav />
             </div>
 
             <div className="block xs:hidden">
-                <MobileNavbar />
+                <AuthenticatedMobileNav />
             </div>
             {children}
             <Toaster />
